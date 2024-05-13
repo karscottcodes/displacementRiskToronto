@@ -2,9 +2,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
-const { getDatastoreResource, getPackage } = require("./opendata/boundaries");
-const { getProfilePackage } = require("./opendata/profiles");
-const { getNHDatastoreResource, getNHPackage } = require("./opendata/neighbourhoods");
+const { getFirstDatastoreResource, getSecondDatastoreResource, getNHPackage } = require("./opendata/neighbourhoods");
+const { getCrimePackage, getFirstCrimeDatastoreResource, getSecondCrimeDatastoreResource } = require("./opendata/crimerates");
 
 dotenv.config();
 
@@ -38,35 +37,28 @@ app.get("/api/menu", async (req, res) => {
     }
 });
 
-
-app.get("/api/ward-data", async (req, res) => {
-    try {
-        const packageMetadata = await getPackage();
-        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
-        const data = await getDatastoreResource(datastoreResources[0]);
-        res.json(data);
-        } catch (error) {
-            console.error("Error fetching CKAN data: ", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-});
-
-app.get("/api/ward-profile", async (req, res) => {
-    try {
-        const data = await getProfilePackage();
-        res.json(data);
-        } catch (error) {
-            console.error("Error fetching CKAN data: ", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-});
-
 app.get("/api/neighbourhoods", async (req, res) => {
     try {
         const packageMetadata = await getNHPackage();
         const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
-        const data = await getNHDatastoreResource(datastoreResources[0]);
-        res.json(data);
+        const firstData = await getFirstDatastoreResource(datastoreResources[0]);
+        const secondData = await getSecondDatastoreResource(datastoreResources[0]);
+        const combinedData = firstData.concat(secondData);
+        res.json(combinedData);
+        } catch (error) {
+            console.error("Error fetching CKAN data: ", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+});
+
+app.get("/api/crimerates", async (req, res) => {
+    try {
+        const packageMetadata = await getCrimePackage();
+        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
+        const firstData = await getFirstCrimeDatastoreResource(datastoreResources[0]);
+        const secondData = await getSecondCrimeDatastoreResource(datastoreResources[0]);
+        const combinedCrimeData = firstData.concat(secondData);
+        res.json(combinedCrimeData);
         } catch (error) {
             console.error("Error fetching CKAN data: ", error);
             res.status(500).json({ error: "Internal Server Error" });

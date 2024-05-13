@@ -1,7 +1,9 @@
-function InfoPanel() {
+function InfoPanel({info}) {
+    
     return (
         <>
-        Info Panel
+        <h2 className="pb-3">Info Panel</h2>
+        <p>{info}</p>
         </>
     );
 }

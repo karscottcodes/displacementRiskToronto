@@ -21,8 +21,8 @@ const getNHPackage = () => {
     });
 };
 
-// Function to retrieve data from CKAN datastore resource
-const getNHDatastoreResource = (resource) => {
+// Retrieve the First Part of the Dataset
+const getFirstDatastoreResource = (resource) => {
     return new Promise((resolve, reject) => {
         https.get(
             `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?id=${resource["id"]}`,
@@ -41,5 +41,26 @@ const getNHDatastoreResource = (resource) => {
     });
 };
 
+// Retrieve the First Part of the Dataset
+const getSecondDatastoreResource = (resource) => {
+    return new Promise((resolve, reject) => {
+        https.get(
+            `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?id=${resource["id"]}&offset=100`,
+            (response) => {
+                let dataChunks = [];
+                response.on("data", (chunk) => {
+                    dataChunks.push(chunk);
+                }).on("end", () => {
+                    let data = Buffer.concat(dataChunks);
+                    resolve(JSON.parse(data.toString())["result"]["records"]);
+                }).on("error", (error) => {
+                    reject(error);
+                });
+            }
+        );
+    });
+};
+
+
 // Exporting functions
-module.exports = { getNHPackage, getNHDatastoreResource };
+module.exports = { getNHPackage, getFirstDatastoreResource, getSecondDatastoreResource };

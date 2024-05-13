@@ -1,8 +1,8 @@
 const https = require("https");
-const packageId = "5e7a8234-f805-43ac-820f-03d7c360b588";
+const packageId = "neighbourhood-crime-rates";
 
 // Function to retrieve package metadata from CKAN
-const getPackage = () => {
+const getCrimePackage = () => {
     return new Promise((resolve, reject) => {
         https.get(
             `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/package_show?id=${packageId}`,
@@ -21,8 +21,8 @@ const getPackage = () => {
     });
 };
 
-// Function to retrieve data from CKAN datastore resource
-const getDatastoreResource = (resource) => {
+// Retrieve the First Part of the Dataset
+const getFirstCrimeDatastoreResource = (resource) => {
     return new Promise((resolve, reject) => {
         https.get(
             `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?id=${resource["id"]}`,
@@ -41,5 +41,26 @@ const getDatastoreResource = (resource) => {
     });
 };
 
+// Retrieve the First Part of the Dataset
+const getSecondCrimeDatastoreResource = (resource) => {
+    return new Promise((resolve, reject) => {
+        https.get(
+            `https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/datastore_search?id=${resource["id"]}&offset=100`,
+            (response) => {
+                let dataChunks = [];
+                response.on("data", (chunk) => {
+                    dataChunks.push(chunk);
+                }).on("end", () => {
+                    let data = Buffer.concat(dataChunks);
+                    resolve(JSON.parse(data.toString())["result"]["records"]);
+                }).on("error", (error) => {
+                    reject(error);
+                });
+            }
+        );
+    });
+};
+
+
 // Exporting functions
-module.exports = { getPackage, getDatastoreResource };
+module.exports = { getCrimePackage, getFirstCrimeDatastoreResource, getSecondCrimeDatastoreResource };

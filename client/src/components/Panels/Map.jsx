@@ -4,21 +4,23 @@ import { MapContainer, TileLayer, Polygon, Popup } from "react-leaflet";
 import "../../App.css";
 import "leaflet/dist/leaflet.css";
 
-function MapPanel() {
-	const [wards, setWards] = useState([]);
+function MapPanel({updateInfo}) {
+	const [hoods, setHoods] = useState([]);
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:3000/api/ward-data")
+			.get("http://localhost:3000/api/neighbourhoods")
 			.then((response) => {
-				const reversedWards = response.data.map(ward => ({
-                    ...ward,
-                    geometry: JSON.parse(ward.geometry).coordinates[0].map(coord => [coord[1], coord[0]])
-                }));
-                setWards(reversedWards);
+				const reversedHoods = response.data.map((hood) => ({
+					...hood,
+					geometry: JSON.parse(hood.geometry).coordinates[0].map(
+						(coord) => [coord[1], coord[0]]
+					),
+				}));
+				setHoods(reversedHoods);
 			})
 			.catch((error) => {
-				console.error("Error fetching Ward Data: ", error);
+				console.error("Error fetching Neighbourhood Data: ", error);
 			});
 	}, []);
 
@@ -29,17 +31,18 @@ function MapPanel() {
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				/>
-				{wards.map((ward) => (
-                    <Polygon
-                        key={ward._id}
-                        positions={ward.geometry}
-                        pathOptions={{ color: 'red' }} // Customize polygon style if needed
-                    >
-						<Popup><strong>Ward {ward.AREA_LONG_CODE}</strong> | {ward.AREA_NAME} <br />
-
-						</Popup>
+				{hoods.map((hood) => (
+					<Polygon
+						key={hood._id}
+						positions={hood.geometry}
+						pathOptions={{ color: "red" }}
+						eventHandlers={{
+							click: () => updateInfo(hood.AREA_NAME, hood.CLASSIFICATION), //Call updateInfo on Click
+						}}
+					>
+						<Popup>{hood.AREA_NAME}</Popup>
 					</Polygon>
-                ))}
+				))}
 			</MapContainer>
 		</>
 	);
