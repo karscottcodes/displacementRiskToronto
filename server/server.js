@@ -2,7 +2,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
-const { getFirstDatastoreResource, getSecondDatastoreResource, getNHPackage } = require("./opendata/neighbourhoods");
+const { getAllBoundaries, nhPackage } = require("./opendata/neighbourhoods");
 const { getCrimePackage, getFirstCrimeDatastoreResource, getSecondCrimeDatastoreResource } = require("./opendata/crimerates");
 
 dotenv.config();
@@ -39,16 +39,19 @@ app.get("/api/menu", async (req, res) => {
 
 app.get("/api/neighbourhoods", async (req, res) => {
     try {
-        const packageMetadata = await getNHPackage();
+        const packageMetadata = await nhPackage();
         const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
-        const firstData = await getFirstDatastoreResource(datastoreResources[0]);
-        const secondData = await getSecondDatastoreResource(datastoreResources[0]);
-        const combinedData = firstData.concat(secondData);
-        res.json(combinedData);
-        } catch (error) {
-            console.error("Error fetching CKAN data: ", error);
-            res.status(500).json({ error: "Internal Server Error" });
+        
+        if (datastoreResources.length === 0) {
+            return res.status(404).json({ error: "No active datastore resources found" });
         }
+
+        const allData = await getAllBoundaries(datastoreResources[0].id);
+        res.json(allData);
+    } catch (error) {
+        console.error("Error fetching CKAN data: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 app.get("/api/crimerates", async (req, res) => {
