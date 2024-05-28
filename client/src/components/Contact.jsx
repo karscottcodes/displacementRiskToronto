@@ -1,13 +1,13 @@
 import "../App.css";
 import Footer from "./parts/Footer";
 import Header from "./parts/Header";
-import Panels from "./Panels/Index";
+import Contact from "./Contact/Index";
 
 function Home() {
     return (
         <>
         <Header />
-        <Panels />
+        <Contact />
         <Footer />
         </>
     )

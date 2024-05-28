@@ -9,7 +9,6 @@ const rankNeighbourhoods = require("./algo/vOne");
 dotenv.config();
 
 //Models
-const LinkModel = require("./Models/MenuLink");
 const MenuLinkModel = require("./Models/MenuLink");
 
 const app = express();
@@ -56,11 +55,6 @@ app.get("/api/neighbourhoods", async (req, res) => {
     }
 });
 
-
-
-
-
-
 app.get("/api/profiles", async (req, res) => {
     try {
         const packageMetadata = await npPackage();
@@ -76,19 +70,4 @@ app.get("/api/profiles", async (req, res) => {
         console.error("Error fetching CKAN data: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
-});
-
-
-app.get("/api/crimerates", async (req, res) => {
-    try {
-        const packageMetadata = await getCrimePackage();
-        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
-        const firstData = await getFirstCrimeDatastoreResource(datastoreResources[0]);
-        const secondData = await getSecondCrimeDatastoreResource(datastoreResources[0]);
-        const combinedCrimeData = firstData.concat(secondData);
-        res.json(combinedCrimeData);
-        } catch (error) {
-            console.error("Error fetching CKAN data: ", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
 });
