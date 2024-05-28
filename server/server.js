@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const { getAllBoundaries, nhPackage } = require("./opendata/neighbourhoods");
-const { getCrimePackage, getFirstCrimeDatastoreResource, getSecondCrimeDatastoreResource } = require("./opendata/crimerates");
+const { npPackage, getAllProfiles } = require("./opendata/nh_profiles");
+const rankNeighbourhoods = require("./algo/vOne");
 
 dotenv.config();
 
@@ -47,12 +48,36 @@ app.get("/api/neighbourhoods", async (req, res) => {
         }
 
         const allData = await getAllBoundaries(datastoreResources[0].id);
-        res.json(allData);
+        const rankedNeighbourhoods = rankNeighbourhoods(allData);
+        res.json(rankedNeighbourhoods);
     } catch (error) {
         console.error("Error fetching CKAN data: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+
+
+
+
+app.get("/api/profiles", async (req, res) => {
+    try {
+        const packageMetadata = await npPackage();
+        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
+        
+        if (datastoreResources.length === 0) {
+            return res.status(404).json({ error: "No active datastore resources found" });
+        }
+
+        const allProfileData = await getAllProfiles(datastoreResources[0].id);
+        res.json(allProfileData);
+    } catch (error) {
+        console.error("Error fetching CKAN data: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 app.get("/api/crimerates", async (req, res) => {
     try {

@@ -35,12 +35,12 @@ function MapPanel({updateInfo}) {
 					<Polygon
 						key={hood._id}
 						positions={hood.geometry}
-						pathOptions={{ color: "red" }}
+						pathOptions={{ color: "black", weight: 1, fillColor: hood.colour, fillOpacity: 0.5 }}
 						eventHandlers={{
-							click: () => updateInfo(hood.AREA_NAME, hood.CLASSIFICATION), //Call updateInfo on Click
+							click: () => updateInfo({areaName: hood.AREA_NAME, classification: hood.CLASSIFICATION}), //Call updateInfo on Click
 						}}
 					>
-						<Popup>{hood.AREA_NAME}</Popup>
+						<Popup>{hood.AREA_NAME}<br />{hood.CLASSIFICATION}</Popup>
 					</Polygon>
 				))}
 			</MapContainer>
