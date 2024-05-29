@@ -2,6 +2,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const { getAllBoundaries, nhPackage } = require("./opendata/neighbourhoods");
 const { npPackage, getAllProfiles } = require("./opendata/nh_profiles");
 const rankNeighbourhoods = require("./algo/vOne");
@@ -16,6 +17,9 @@ app.use(express.json());
 app.use(cors({
     origin: "*",
 }));
+
+//Serve Static Files
+app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.PORT || 3000;
 
