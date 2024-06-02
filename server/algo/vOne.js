@@ -21,12 +21,13 @@ const rankNeighbourhoods = (neighbourhoods) => {
             case 3:
                 return "green";
             default:
-                return "grey";
+                return "";
         }
     };
 
     neighbourhoods.forEach(neighbourhood => {
-        neighbourhood.score = classificationPoints[neighbourhood.CLASSIFICATION] || 0;
+        const classification = neighbourhood.properties ? neighbourhood.properties.CLASSIFICATION : neighbourhood.CLASSIFICATION;
+        neighbourhood.score = classificationPoints[classification] || 0;
         neighbourhood.colour = colourScore(neighbourhood.score);
     });
 
