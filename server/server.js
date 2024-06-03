@@ -48,6 +48,15 @@ app.get("/api/menu", async (req, res) => {
 
 // 2021: 158 Neighbourhoods
 
+const mergeData = (boundaryData, profilesData) => {
+    return boundaryData.map(area => {
+      const neighbourhood = profilesData[area.AREA_NAME];
+      return neighbourhood
+        ? { ...area, ...{ "Neighbourhood Name": area.AREA_NAME }, ...neighbourhood }
+        : area;
+    });
+  };
+
 // Merge 158 Data and serve
 app.get("/api/neighbourhoods", async (req, res) => {
     try {
@@ -60,9 +69,12 @@ app.get("/api/neighbourhoods", async (req, res) => {
   
       const boundary158Data = await getAllBoundaries(datastoreResources[0].id);
       const profiles158Path = path.join(__dirname, "public/datasets", "profiles_158.json");
-      console.log("Path: ", profiles158Path);
+
+    //   console.log("Path: ", profiles158Path);
+      
       const profiles158Data = JSON.parse(await fs.readFile(profiles158Path, "utf-8"));
-      console.log("Loaded profile data:", profiles158Data);
+      
+    //   console.log("Loaded profile data:", profiles158Data);
       
   
       const all158Data = boundary158Data.map(area => {
@@ -70,7 +82,7 @@ app.get("/api/neighbourhoods", async (req, res) => {
         return neighbourhood ? { ...area, ...{ "Neighbourhood Name": area.AREA_NAME }, ...neighbourhood } : area;
       });
   
-      const output158 = path.join(__dirname, "public/datasets", "output158.json");
+      const output158 = path.join(__dirname, "public/datasets", "output_158.json");
       await fs.writeFile(output158, JSON.stringify(all158Data, null, 2), "utf-8");
       console.log("158 Data Merged. ", all158Data);
 
