@@ -60,40 +60,48 @@ const mergeData = (boundaryData, profilesData) => {
 // Merge 158 Data and serve
 app.get("/api/neighbourhoods", async (req, res) => {
     try {
-      const packageMetadata = await nhPackage();
-      const datastoreResources = packageMetadata.resources.filter(r => r.datastore_active);
-  
-      if (datastoreResources.length === 0) {
-        return res.status(404).json({ error: "No active datastore resources found." });
-      }
-  
-      const boundary158Data = await getAllBoundaries(datastoreResources[0].id);
-      const profiles158Path = path.join(__dirname, "public/datasets", "profiles_158.json");
+        const packageMetadata = await nhPackage();
+        const datastoreResources = packageMetadata.resources.filter(r => r.datastore_active);
 
-    //   console.log("Path: ", profiles158Path);
-      
-      const profiles158Data = JSON.parse(await fs.readFile(profiles158Path, "utf-8"));
-      
-    //   console.log("Loaded profile data:", profiles158Data);
-      
-  
-      const all158Data = boundary158Data.map(area => {
-        const neighbourhood = profiles158Data[area.AREA_NAME];
-        return neighbourhood ? { ...area, ...{ "Neighbourhood Name": area.AREA_NAME }, ...neighbourhood } : area;
-      });
-  
-      const output158 = path.join(__dirname, "public/datasets", "output_158.json");
-      await fs.writeFile(output158, JSON.stringify(all158Data, null, 2), "utf-8");
-      console.log("158 Data Merged. ", all158Data);
+        if (datastoreResources.length === 0) {
+            return res.status(404).json({ error: "No active datastore resources found" });
+        }
 
-      const ranked158Neighbourhoods = rankNeighbourhoods(all158Data);
+        const boundary158Data = await getAllBoundaries(datastoreResources[0].id);
+        const profiles158 = path.join(__dirname, "public/datasets", "profiles_158.json"); // Adjusted path
+        const profilesData158 = JSON.parse(await fs.readFile(profiles158, "utf-8"));
 
-      res.json(ranked158Neighbourhoods);
+        const all158Data = boundary158Data.map(area => {
+            const neighbourhood = _.find(profilesData158, { "Neighbourhood Name": area.AREA_NAME });
+            return neighbourhood ? { ...area, ...neighbourhood } : area;
+        });
+
+        const output158 = path.join(__dirname, "public/datasets", "output158.json"); // Adjusted path
+        await fs.writeFile(output158, JSON.stringify(all158Data, null, 2), "utf-8");
+
+        const ranked158Neighbourhoods = rankNeighbourhoods(all158Data);
+
+        res.json(ranked158Neighbourhoods);
     } catch (error) {
-      console.error("Error Merging 158 Data: ", error);
-      res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error Merging 158 Data: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // 2016: 140 Neighbourhoods
@@ -112,6 +120,23 @@ app.get("/api/neighbourhoods140", async (req, res) => {
     }
 });
 
+// 140 Neighbourhood PROFILES
+app.get("/api/profiles140", async (req, res) => {
+    try {
+        const packageMetadata = await npPackage();
+        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
+        
+        if (datastoreResources.length === 0) {
+            return res.status(404).json({ error: "No active datastore resources found" });
+        }
+
+        const allProfileData = await getAllProfiles(datastoreResources[0].id);
+        res.json(allProfileData);
+    } catch (error) {
+        console.error("Error fetching CKAN data: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 //ContactForm
 app.post("/send", (req, res) => {
@@ -157,31 +182,5 @@ app.post("/send", (req, res) => {
             success: false,
             message: "Something went wrong. Try again later."
         });
-    }
-});
-
-
-
-
-
-
-
-
-
-// 140 Neighbourhood PROFILES
-app.get("/api/profiles140", async (req, res) => {
-    try {
-        const packageMetadata = await npPackage();
-        const datastoreResources = packageMetadata["resources"].filter(r => r.datastore_active);
-        
-        if (datastoreResources.length === 0) {
-            return res.status(404).json({ error: "No active datastore resources found" });
-        }
-
-        const allProfileData = await getAllProfiles(datastoreResources[0].id);
-        res.json(allProfileData);
-    } catch (error) {
-        console.error("Error fetching CKAN data: ", error);
-        res.status(500).json({ error: "Internal Server Error" });
     }
 });

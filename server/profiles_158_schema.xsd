@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="NEIGHBOURHOOD-DATA">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="NEIGHBOURHOOD" maxOccurs="unbounded">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="AREA_NAME" type="xs:string"/>
+                     <xs:element name="AREA_SHORT_CODE" type="xs:string"/>
+                     <xs:element name="DESIGNATION" type="xs:string"/>
+                     <xs:element name="ZEROFOURTEEN" type="xs:string"/>
+                     <xs:element name="FIFTEENSIXTYFOUR" type="xs:string"/>
+                     <xs:element name="SIXTYFIVEPLUS" type="xs:string"/>
+                     <xs:element name="EIGHTYFIVEPLUS" type="xs:string"/>
+                     <xs:element name="UNEMPLOYMENTRATE" type="xs:string"/>
+                     <xs:element name="TENANTSGREATERTHIRTY" type="xs:string"/>
+                     <xs:element name="MEDIANRENT" type="xs:string"/>
+                     <xs:element name="AVERAGERENT" type="xs:string"/>
+                     <xs:element name="ENGONLY" type="xs:string"/>
+                     <xs:element name="FRONLY" type="xs:string"/>
+                     <xs:element name="ENGANDFR" type="xs:string"/>
+                     <xs:element name="NOENGFR" type="xs:string"/>
+                     <xs:element name="SINGLEOFFICIAL" type="xs:string"/>
+                     <xs:element name="SINGLENONOFFICIAL" type="xs:string"/>
+                     <xs:element name="MULTIENGFR" type="xs:string"/>
+                     <xs:element name="MULTIENGNON" type="xs:string"/>
+                     <xs:element name="MULTIFRNON" type="xs:string"/>
+                     <xs:element name="ENGFRANDNON" type="xs:string"/>
+                     <xs:element name="NONNON" type="xs:string"/>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>
