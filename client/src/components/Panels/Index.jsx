@@ -26,6 +26,7 @@ function Panels() {
 		flexDirection: "column",
 		alignItems: "center",
 		justifyContent: "center",
+		overflowY: "auto",
 	};
 
 	useEffect(() => {

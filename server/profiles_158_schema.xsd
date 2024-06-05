@@ -6,28 +6,64 @@
             <xs:element name="NEIGHBOURHOOD" maxOccurs="unbounded">
                <xs:complexType>
                   <xs:sequence>
-                     <xs:element name="AREA_NAME" type="xs:string"/>
-                     <xs:element name="AREA_SHORT_CODE" type="xs:string"/>
-                     <xs:element name="DESIGNATION" type="xs:string"/>
-                     <xs:element name="ZEROFOURTEEN" type="xs:string"/>
-                     <xs:element name="FIFTEENSIXTYFOUR" type="xs:string"/>
-                     <xs:element name="SIXTYFIVEPLUS" type="xs:string"/>
-                     <xs:element name="EIGHTYFIVEPLUS" type="xs:string"/>
-                     <xs:element name="UNEMPLOYMENTRATE" type="xs:string"/>
-                     <xs:element name="TENANTSGREATERTHIRTY" type="xs:string"/>
-                     <xs:element name="MEDIANRENT" type="xs:string"/>
-                     <xs:element name="AVERAGERENT" type="xs:string"/>
-                     <xs:element name="ENGONLY" type="xs:string"/>
-                     <xs:element name="FRONLY" type="xs:string"/>
-                     <xs:element name="ENGANDFR" type="xs:string"/>
-                     <xs:element name="NOENGFR" type="xs:string"/>
-                     <xs:element name="SINGLEOFFICIAL" type="xs:string"/>
-                     <xs:element name="SINGLENONOFFICIAL" type="xs:string"/>
-                     <xs:element name="MULTIENGFR" type="xs:string"/>
-                     <xs:element name="MULTIENGNON" type="xs:string"/>
-                     <xs:element name="MULTIFRNON" type="xs:string"/>
-                     <xs:element name="ENGFRANDNON" type="xs:string"/>
-                     <xs:element name="NONNON" type="xs:string"/>
+                     <xs:element name="AREA_NAME" type="xs:string" />
+                     <xs:element name="DESIGNATION" type="xs:string" />
+                     <xs:element name="VULNERABILITIES">
+                        <xs:complexType>
+                           <xs:sequence>
+                              <xs:element name="UNEMPLOYMENT_RATE" type="xs:string" />
+                              <xs:element name="INC_LOW" type="xs:string" />
+                              <xs:element name="INC_HIGH" type="xs:string" />
+                              <xs:element name="INC_AVG" type="xs:string" />
+                              <xs:element name="RENT_BURDENED" type="xs:string" />
+                              <xs:element name="CAN_CITIZEN" type="xs:string" />
+                              <xs:element name="NOT_CAN_CITIZEN" type="xs:string" />
+                              <xs:element name="ZERO_FOURTEEN" type="xs:string" />
+                              <xs:element name="FIFTEEN_SIXTYFOUR" type="xs:string" />
+                              <xs:element name="SIXTYFIVEPLUS" type="xs:string" />
+                              <xs:element name="EIGHTYFIVEPLUS" type="xs:string" />
+                              <xs:element name="AVERAGE_AGE" type="xs:string" />
+                           </xs:sequence>
+                        </xs:complexType>
+                     </xs:element>
+                     <xs:element name="CONDITIONS">
+                        <xs:complexType>
+                           <xs:sequence>
+                              <xs:element name="SINGLE_DETACHED" type="xs:string" />
+                              <xs:element name="SEMI_DETACHED" type="xs:string" />
+                              <xs:element name="ROW_HOUSE" type="xs:string" />
+                              <xs:element name="APT_DUPLEX" type="xs:string" />
+                              <xs:element name="APT_LESS_5" type="xs:string" />
+                              <xs:element name="APT_MORE_5" type="xs:string" />
+                              <xs:element name="OTHER" type="xs:string" />
+                              <xs:element name="MOVABLE" type="xs:string" />
+                              <xs:element name="SIZE_ONE" type="xs:string" />
+                              <xs:element name="SIZE_TWO" type="xs:string" />
+                              <xs:element name="SIZE_THREE" type="xs:string" />
+                              <xs:element name="SIZE_FOUR" type="xs:string" />
+                              <xs:element name="SIZE_FIVEPLUS" type="xs:string" />
+                              <xs:element name="OWNER" type="xs:string" />
+                              <xs:element name="RENTER" type="xs:string" />
+                              <xs:element name="GOVT" type="xs:string" />
+                              <xs:element name="PRE_1960" type="xs:string" />
+                              <xs:element name="AGE1961_1980" type="xs:string" />
+                              <xs:element name="AGE1981_1990" type="xs:string" />
+                              <xs:element name="AGE1991_2000" type="xs:string" />
+                              <xs:element name="AGE2001_2005" type="xs:string" />
+                              <xs:element name="AGE2006_2010" type="xs:string" />
+                              <xs:element name="AGE2011_2015" type="xs:string" />
+                              <xs:element name="AGE2016_2021" type="xs:string" />
+                           </xs:sequence>
+                        </xs:complexType>
+                     </xs:element>
+                     <xs:element name="PRESSURES">
+                        <xs:complexType>
+                           <xs:sequence>
+                              <xs:element name="MEDIAN_RENT" type="xs:string" />
+                              <xs:element name="AVERAGE_RENT" type="xs:string" />
+                           </xs:sequence>
+                        </xs:complexType>
+                     </xs:element>
                   </xs:sequence>
                </xs:complexType>
             </xs:element>

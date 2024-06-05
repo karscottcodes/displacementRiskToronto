@@ -108,18 +108,65 @@ function MapPanel({ updateInfo, mapRef }) {
                                         fillOpacity: 0.5,
                                     }}
                                     eventHandlers={{
-                                        click: () =>
+                                        click: () => {
+                                            const vulnerabilities = hood.VULNERABILITIES[0] || {};
+                                            const conditions = hood.CONDITIONS[0] || {};
+                                            const pressures = hood.PRESSURES[0] || {};
                                             updateInfo({
-                                                areaName: hood.AREA_NAME,
-                                                classification:
-                                                    hood.CLASSIFICATION,
-                                            }),
+                                                area_name: hood.AREA_NAME,
+                                                designation: hood.DESIGNATION,
+                                                VULNERABILITIES: {
+                                                    unemployment_rate: vulnerabilities.UNEMPLOYMENT_RATE,
+                                                    inc_lower_half: vulnerabilities.INC_LOW,
+                                                    inc_upper_half: vulnerabilities.INC_HIGH,
+                                                    inc_average: vulnerabilities.INC_AVG,
+                                                    rent_burdened: vulnerabilities.RENT_BURDENED,
+                                                    can_citizen: vulnerabilities.CAN_CITIZEN,
+                                                    not_can_citizen: vulnerabilities.NOT_CAN_CITIZEN,
+                                                    zero_fourteen: vulnerabilities.ZERO_FOURTEEN,
+                                                    fifteen_sixtyfour: vulnerabilities.FIFTEEN_SIXTYFOUR,
+                                                    sixtyfiveplus: vulnerabilities.SIXTYFIVEPLUS,
+                                                    eightyfiveplus: vulnerabilities.EIGHTYFIVEPLUS,
+                                                    average_age: vulnerabilities.AVERAGE_AGE
+                                                },
+                                                CONDITIONS: {
+                                                    single_detached: conditions.SINGLE_DETACHED,
+                                                    semi_detached: conditions.SEMI_DETACHED,
+                                                    row_house: conditions.ROW_HOUSE,
+                                                    apt_duplex: conditions.APT_DUPLEX,
+                                                    apt_less_5: conditions.APT_LESS_5,
+                                                    apt_more_5: conditions.APT_MORE_5,
+                                                    other: conditions.OTHER,
+                                                    moveable: conditions.MOVABLE,
+                                                    size_one: conditions.SIZE_ONE,
+                                                    size_two: conditions.SIZE_TWO,
+                                                    size_three: conditions.SIZE_THREE,
+                                                    size_four: conditions.SIZE_FOUR,
+                                                    size_fiveplus: conditions.SIZE_FIVEPLUS,
+                                                    owner: conditions.OWNER,
+                                                    renter: conditions.RENTER,
+                                                    govt: conditions.GOVT,
+                                                    pre_1960: conditions.PRE_1960,
+                                                    age1961_1980: conditions.AGE1961_1980,
+                                                    age1981_1990: conditions.AGE1981_1990,
+                                                    age1991_2000: conditions.AGE1991_2000,
+                                                    age2001_2005: conditions.AGE2001_2005,
+                                                    age2006_2010: conditions.AGE2006_2010,
+                                                    age2011_2015: conditions.AGE2011_2015,
+                                                    age2016_2021: conditions.AGE2016_2021,
+                                                },
+                                                PRESSURES: {
+                                                    median_rent: pressures.MEDIAN_RENT,
+                                                    average_rent: pressures.AVERAGE_RENT,
+                                                }
+                                            });
+                                        }
                                     }}
                                 >
                                     <Popup>
                                         {hood.AREA_NAME}
                                         <br />
-                                        {hood.CLASSIFICATION}
+                                        {hood.DESIGNATION}
                                     </Popup>
                                 </Polygon>
                             ))}
