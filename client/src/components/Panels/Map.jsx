@@ -187,7 +187,7 @@ function MapPanel({ updateInfo, mapRef }) {
                                     eventHandlers={{
                                         click: () =>
                                             updateInfo({
-                                                areaName: hood.properties
+                                                area_name: hood.properties
                                                     .AREA_NAME,
                                                 classification:
                                                     hood.properties
