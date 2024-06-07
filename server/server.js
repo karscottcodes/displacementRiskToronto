@@ -81,13 +81,11 @@ app.get("/api/neighbourhoods", async (req, res) => {
 		const datastoreResources = packageMetadata.resources.filter(
 			(r) => r.datastore_active
 		);
-
 		if (datastoreResources.length === 0) {
 			return res
 				.status(404)
 				.json({ error: "No active datastore resources found" });
-		}
-
+		};
 		const boundary158Data = await getAllBoundaries(
 			datastoreResources[0].id
 		);
@@ -97,13 +95,10 @@ app.get("/api/neighbourhoods", async (req, res) => {
 			boundary158Data,
 			xml2021Data
 		);
-
 		// console.log(merged158Neighbourhoods);
-
 		const ranked158Neighbourhoods = await rankNeighbourhoods(
 			merged158Neighbourhoods
 		);
-
 		res.json(ranked158Neighbourhoods);
 	} catch (error) {
 		console.error("Error Fetching 158 Data: ", error);
@@ -111,10 +106,37 @@ app.get("/api/neighbourhoods", async (req, res) => {
 	}
 });
 
+
+
+
 // 2016: 140 Neighbourhoods
+
+const getCensus2016XML = async () => {
+	const census2016XMLPath = path.join(
+		__dirname,
+		"/public/datasets",
+		"Census2016v1.xml"
+	);
+	const xml = await fs.readFile(census2016XMLPath, "utf-8");
+	const parser = new xml2js.Parser();
+	const result = await parser.parseStringPromise(xml);
+	return result["NEIGHBOURHOOD-DATA"].NEIGHBOURHOOD;
+};
+
+const merge140Data = (neighbourhoodData, xmlData) => {
+	return neighbourhoodData.map((hood) => {
+		const xmlHood = xmlData.find((xHood) => xHood.AREA_NAME[0] === hood.properties.AREA_NAME);
+		if (xmlHood) {
+			// Merge relevant properties
+			return { ...hood, xmlProperties: xmlHood };
+		}
+		return hood;
+	});
+};
 
 app.get("/api/neighbourhoods140", async (req, res) => {
 	try {
+		//Read GeoJSON Boundaries
 		const data140 = path.join(
 			__dirname,
 			"/public/datasets",
@@ -122,33 +144,15 @@ app.get("/api/neighbourhoods140", async (req, res) => {
 		);
 		const geojsonData = await fs.readFile(data140, "utf-8");
 		const jsonData = JSON.parse(geojsonData);
-
-		const rankedNeighbourhoods140 = rankNeighbourhoods(jsonData.features);
-		res.json(rankedNeighbourhoods140);
+		//Read XML Data
+		const xml2016Data = await getCensus2016XML();
+		//Merge
+		const merged140Neighbourhoods = merge140Data(jsonData.features, xml2016Data);
+		//Rank
+		// const ranked140Neighbourhoods = rank140Neighbourhoods(merged140Neighbourhoods);
+		res.json(merged140Neighbourhoods);
 	} catch (error) {
 		console.error("Error fetching 140 dataset: ", error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-});
-
-// 140 Neighbourhood PROFILES
-app.get("/api/profiles140", async (req, res) => {
-	try {
-		const packageMetadata = await npPackage();
-		const datastoreResources = packageMetadata["resources"].filter(
-			(r) => r.datastore_active
-		);
-
-		if (datastoreResources.length === 0) {
-			return res
-				.status(404)
-				.json({ error: "No active datastore resources found" });
-		}
-
-		const allProfileData = await getAllProfiles(datastoreResources[0].id);
-		res.json(allProfileData);
-	} catch (error) {
-		console.error("Error fetching CKAN data: ", error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
