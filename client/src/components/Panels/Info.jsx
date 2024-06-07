@@ -1,10 +1,16 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
-import { Pie, Bar, Line } from "react-chartjs-2";
+import PropTypes from "prop-types";
+import { Pie, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 function InfoPanel({ info }) {
+
+	InfoPanel.propTypes = {
+        info: PropTypes.object, // info is an object, but is not required
+	};
 
 	const chartOptions = {
         responsive: true,
@@ -227,13 +233,11 @@ function InfoPanel({ info }) {
 		</div>
 	);
 
-	// Check If An Area Has Been Clicked; Else Display Welcome Message
-	return (
-		<div className="p-5">
-			{info?.area_name ? (
+	const renderInfoPanel = () => {
+		if (info.datasetType === "2021") {
+			return (
 				<>
-					<div className="grid grid-cols-2 grid-rows-3">
-						<div className="col-span-2 text-3xl font-bold pb-3 text-center text-tor-blue"><h2>{info.area_name}</h2></div>
+					<div className="col-span-2 text-3xl font-bold pb-3 text-center text-tor-blue"><h2>{info.area_name}</h2></div>
 						<div className="col-span-2 pb-3"><span className="font-bold">Designation:</span> {info.designation}</div>
 						<div className="col-span-2 pb-3 text-2xl py-3 font-bold text-tor-red underline"><h3>Population Vulnerabilities</h3></div>
 						<div><span className="font-bold">Unemployment Rate:</span> {info.VULNERABILITIES.unemployment_rate} % </div>
@@ -287,6 +291,75 @@ function InfoPanel({ info }) {
 						<div className="col-span-2 pb-3 text-2xl py-3 font-bold underline text-tor-red"><h3>Market Pressures</h3></div>
 						<div>Median Rent (CDN): $ {info.PRESSURES.median_rent} / month</div>
 						<div>Average Rent (CDN): $ {info.PRESSURES.average_rent} / month</div>
+				</>
+			);
+		} else if (info.datasetType === "2016") {
+			return (
+				<>
+					<div className="col-span-2 text-3xl font-bold pb-3 text-center text-tor-blue"><h2>{info.area_name}</h2></div>
+						<div className="col-span-2 pb-3"><span className="font-bold">Designation:</span> {info.classification}</div>
+						<div className="col-span-2 pb-3 text-2xl py-3 font-bold text-tor-red underline"><h3>Population Vulnerabilities</h3></div>
+						<div><span className="font-bold">Unemployment Rate:</span> {info.VULNERABILITIES.unemployment_rate} % </div>
+						<div><span className="font-bold">Rent Burdened:</span> {info.VULNERABILITIES.rent_burdened} %</div>
+						<div><span className="font-bold">Canadian Citizen:</span> {info.VULNERABILITIES.can_citizen}</div>
+						<div className="row-span-2"><Pie options={chartOptions} data={citizenshipData} /></div>
+						<div><span className="font-bold">Not Canadian Citizen:</span> {info.VULNERABILITIES.not_can_citizen}</div>
+						<div className="col-span-2 font-bold text-xl"><h4>Income Factors</h4></div>
+						<div className="col-span-2 py-3"><span className="font-bold">Avg Income:</span> $ {info.VULNERABILITIES.inc_average} CDN</div>
+						<div className="pb-3"><span className="font-bold">Income in Lower Half:</span> {info.VULNERABILITIES.inc_lower_half}</div>
+						<div><span className="font-bold">Income in Upper Half:</span> {info.VULNERABILITIES.inc_upper_half}</div>
+						<div className="col-span-2 font-bold text-xl py-3"><h4>Population Distribution</h4></div>
+						<div><span className="font-bold">Children/Youth (0 - 14):</span> {info.VULNERABILITIES.zero_fourteen} %</div>
+						<div className="row-span-4"><Pie options={chartOptions} data={ageData} /></div>
+						<div><span className="font-bold">Working Age (15-64):</span> {info.VULNERABILITIES.fifteen_sixtyfour} %</div>
+						<div><span className="font-bold">Seniors (65+):</span> {info.VULNERABILITIES.sixtyfiveplus} %</div>
+						<div><span className="font-bold">Older Seniors (85+):</span> {info.VULNERABILITIES.eightyfiveplus} %</div>
+						<div className="col-span-2 text-2xl pt-10 font-bold underline text-tor-red"><h3>Housing Conditions</h3></div>
+						<div className="col-span-2 font-bold text-xl py-3"><h4>Housing Type</h4></div>
+						<div>Single Detached: {info.CONDITIONS.single_detached}</div>
+						<div className="row-span-8"><Pie options={chartOptions} data={hhTypeData} /></div>
+						<div>Semi Detached: {info.CONDITIONS.semi_detached}</div>
+						<div>Row House: {info.CONDITIONS.row_house}</div>
+						<div>Apt (Duplex): {info.CONDITIONS.apt_duplex}</div>
+						<div>Apt (Less than 5 Floors): {info.CONDITIONS.apt_less_5}</div>
+						<div>Apt (More than 5 Floors): {info.CONDITIONS.apt_more_5}</div>
+						<div>Other: {info.CONDITIONS.other}</div>
+						<div>Moveable Dwelling: {info.CONDITIONS.moveable}</div>
+						<div className="col-span-2 font-bold text-xl py-3"><h4>Size of Household</h4></div>
+						<div>One: {info.CONDITIONS.size_one} </div>
+						<div className="row-span-5"><Bar options={chartOptions} data={hhSizeData} /></div>
+						<div>Two: {info.CONDITIONS.size_two} </div>
+						<div>Three: {info.CONDITIONS.size_three} </div>
+						<div>Four: {info.CONDITIONS.size_four} </div>
+						<div>Five+: {info.CONDITIONS.size_fiveplus} </div>
+						<div className="col-span-2 font-bold text-xl py-3"><h4>Household by Tenure (Own/Tenant)</h4></div>
+						<div>Owner: {info.CONDITIONS.owner} </div>
+						<div className="row-span-3">chart</div>
+						<div>Tenant: {info.CONDITIONS.renter} </div>
+						<div>Government/Indigienous: {info.CONDITIONS.govt} </div>
+						<div className="col-span-2 font-bold text-xl py-3"><h4>Dwelling Build Year</h4></div>
+						<div>Pre-1960: {info.CONDITIONS.pre_1960} </div>
+						<div className="row-span-8"><Bar options={chartOptions} data={buildYearData} /></div>
+						<div>1961-1980: {info.CONDITIONS.age1961_1980} </div>
+						<div>1981-1990: {info.CONDITIONS.age1981_1990} </div>
+						<div>1991-2000: {info.CONDITIONS.age1991_2000} </div>
+						<div>2001-2005: {info.CONDITIONS.age2001_2005} </div>
+						<div>2006-2010: {info.CONDITIONS.age2006_2010} </div>
+						<div>2011-2015: {info.CONDITIONS.age2011_2015} </div>
+						<div className="col-span-2 pb-3 text-2xl py-3 font-bold underline text-tor-red"><h3>Market Pressures</h3></div>
+						<div className="col-span-2">Average Rent (CDN): $ {info.PRESSURES.average_rent} / month</div>
+				</>
+			);
+		}
+	};
+
+	// Check If An Area Has Been Clicked; Else Display Welcome Message
+	return (
+		<div className="p-5">
+			{info?.area_name ? (
+				<>
+					<div className="grid grid-cols-2 grid-rows-3">
+						{renderInfoPanel()}
 					</div>
 				</>
 			) : (

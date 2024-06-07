@@ -10,10 +10,18 @@ import {
 } from "react-leaflet";
 import "../../App.css";
 import "leaflet/dist/leaflet.css";
+import PropTypes from "prop-types";
 
 function MapPanel({ updateInfo, mapRef }) {
     const [hoods, setHoods] = useState([]);
     const [hoods140, setHoods140] = useState([]);
+
+    MapPanel.propTypes = {
+        updateInfo: PropTypes.func.isRequired, // updateInfo is a FUNCTION
+        mapRef: PropTypes.shape({ // mapRef is an object, with a SPECIFIC SHAPE, and it should be set to "current"
+            current: PropTypes.object.isRequired
+        }).isRequired,
+    };
 
     const setMapRef = useCallback(
         (node) => {
@@ -115,6 +123,7 @@ function MapPanel({ updateInfo, mapRef }) {
                                             updateInfo({
                                                 area_name: hood.AREA_NAME,
                                                 designation: hood.DESIGNATION,
+                                                datasetType: "2021",
                                                 VULNERABILITIES: {
                                                     unemployment_rate: vulnerabilities.UNEMPLOYMENT_RATE,
                                                     inc_lower_half: vulnerabilities.INC_LOW,
@@ -185,14 +194,61 @@ function MapPanel({ updateInfo, mapRef }) {
                                         fillOpacity: 0.5,
                                     }}
                                     eventHandlers={{
-                                        click: () =>
+                                        click: () => {
+                                            const vulnerabilities = (hood.xmlProperties.VULNERABILITIES || [])[0] || {};
+                                            const conditions = (hood.xmlProperties.CONDITIONS || [])[0] || {};
+                                            const pressures = (hood.xmlProperties.PRESSURES || [])[0] || {};
                                             updateInfo({
-                                                area_name: hood.properties
-                                                    .AREA_NAME,
-                                                classification:
-                                                    hood.properties
-                                                        .CLASSIFICATION,
-                                            }),
+                                                area_name: hood.properties.AREA_NAME,
+                                                classification: hood.properties.CLASSIFICATION,
+                                                datasetType: "2016",
+                                                VULNERABILITIES: {
+                                                    unemployment_rate: vulnerabilities.UNEMPLOYMENT_RATE,
+                                                    inc_lower_half: vulnerabilities.INC_LOW,
+                                                    inc_upper_half: vulnerabilities.INC_HIGH,
+                                                    less_than_thirty: vulnerabilities.LESS_THAN_THIRTY,
+                                                    more_than_thirty: vulnerabilities.MORE_THAN_THIRTY,
+                                                    thirty_to_hundred: vulnerabilities.THIRTY_TO_HUNDRED,
+                                                    can_citizen: vulnerabilities.CAN_CITIZEN,
+                                                    not_can_citizen: vulnerabilities.NOT_CAN_CITIZEN,
+                                                    children: vulnerabilities.CHILDREN,
+                                                    youth: vulnerabilities.YOUTH,
+                                                    working_age: vulnerabilities.WORKING_AGE,
+                                                    pre_retired: vulnerabilities.PRE_RETIRE,
+                                                    seniors: vulnerabilities.SENIORS,
+                                                    older_seniors: vulnerabilities.OLDER_SENIORS
+                                                },
+                                                CONDITIONS: {
+                                                    single_detached: conditions.SINGLE_DETACHED,
+                                                    semi_detached: conditions.SEMI_DETACHED,
+                                                    row_house: conditions.ROW_HOUSE,
+                                                    apt_duplex: conditions.APT_DUPLEX,
+                                                    apt_less_5: conditions.APT_LESS_5,
+                                                    apt_more_5: conditions.APT_MORE_5,
+                                                    other_single: conditions.OTHER_SINGLE,
+                                                    other_attached: conditions.OTHER_ATTACHED,
+                                                    moveable: conditions.MOVABLE,
+                                                    size_one: conditions.SIZE_ONE,
+                                                    size_two: conditions.SIZE_TWO,
+                                                    size_three: conditions.SIZE_THREE,
+                                                    size_four: conditions.SIZE_FOUR,
+                                                    size_fiveplus: conditions.SIZE_FIVEPLUS,
+                                                    owner: conditions.OWNER,
+                                                    renter: conditions.RENTER,
+                                                    govt: conditions.GOVT,
+                                                    pre_1960: conditions.PRE_1960,
+                                                    age1961_1980: conditions.AGE1961_1980,
+                                                    age1981_1990: conditions.AGE1981_1990,
+                                                    age1991_2000: conditions.AGE1991_2000,
+                                                    age2001_2005: conditions.AGE2001_2005,
+                                                    age2006_2010: conditions.AGE2006_2010,
+                                                    age2011_2015: conditions.AGE2011_2015,
+                                                },
+                                                PRESSURES: {
+                                                    average_rent: pressures.AVERAGE_RENT,
+                                                }
+                                            });
+                                        }
                                     }}
                                 >
                                     <Popup>
