@@ -8,7 +8,8 @@ const xml2js = require("xml2js");
 const transporter = require("./config");
 const { getAllBoundaries, nhPackage } = require("./opendata/neighbourhoods");
 const { npPackage, getAllProfiles } = require("./opendata/nh_profiles");
-const rankNeighbourhoods = require("./algo/vOne");
+// const rankNeighbourhoods = require("./algo/vOne");
+const rankNeighbourhoods = require("./algo/vTwo");
 
 dotenv.config();
 
@@ -149,8 +150,8 @@ app.get("/api/neighbourhoods140", async (req, res) => {
 		//Merge
 		const merged140Neighbourhoods = merge140Data(jsonData.features, xml2016Data);
 		//Rank
-		// const ranked140Neighbourhoods = rank140Neighbourhoods(merged140Neighbourhoods);
-		res.json(merged140Neighbourhoods);
+		const ranked140Neighbourhoods = rankNeighbourhoods(merged140Neighbourhoods);
+		res.json(ranked140Neighbourhoods);
 	} catch (error) {
 		console.error("Error fetching 140 dataset: ", error);
 		res.status(500).json({ error: "Internal Server Error" });

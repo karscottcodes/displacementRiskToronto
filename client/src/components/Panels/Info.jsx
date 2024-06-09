@@ -289,8 +289,8 @@ function InfoPanel({ info }) {
 						<div>2011-2015: {info.CONDITIONS.age2011_2015} </div>
 						<div>2016-2021: {info.CONDITIONS.age2016_2021} </div>
 						<div className="col-span-2 pb-3 text-2xl py-3 font-bold underline text-tor-red"><h3>Market Pressures</h3></div>
-						<div>Median Rent (CDN): $ {info.PRESSURES.median_rent} / month</div>
-						<div>Average Rent (CDN): $ {info.PRESSURES.average_rent} / month</div>
+						<div className="col-span-2">Median Rent (CDN): $ {info.PRESSURES.median_rent} / month</div>
+						<div className="col-span-2">Average Rent (CDN): $ {info.PRESSURES.average_rent} / month</div>
 				</>
 			);
 		} else if (info.datasetType === "2016") {
