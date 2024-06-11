@@ -1,11 +1,11 @@
 const rankNeighbourhoods = (neighbourhoods) => {
 	// Risk Categories - 5 Categories
 	const riskCategories = [
-		{ name: "high-risk", color: "red" },
-		{ name: "medium-high-risk", color: "orange" },
-		{ name: "medium-risk", color: "yellow" },
-		{ name: "medium-low-risk", color: "lightgreen" },
-		{ name: "low-risk", color: "green" },
+		{ name: "high-risk", color: "#c8102e" },
+		{ name: "medium-high-risk", color: "#FFBD00" },
+		{ name: "medium-risk", color: "#F4AFB4" },
+		{ name: "medium-low-risk", color: "#4ea5d9" },
+		{ name: "low-risk", color: "#003087" },
 	];
 
 	// Calculate non-Canadian percentage

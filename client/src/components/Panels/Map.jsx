@@ -11,10 +11,12 @@ import {
 import "../../App.css";
 import "leaflet/dist/leaflet.css";
 import PropTypes from "prop-types";
+import Legend from "../parts/Legend";
 
 function MapPanel({ updateInfo, mapRef }) {
     const [hoods, setHoods] = useState([]);
     const [hoods140, setHoods140] = useState([]);
+    const [map, setMap] = useState(null);
 
     MapPanel.propTypes = {
         updateInfo: PropTypes.func.isRequired, // updateInfo is a FUNCTION
@@ -97,7 +99,9 @@ function MapPanel({ updateInfo, mapRef }) {
                 center={[43.6426, -79.3871]}
                 zoom={10}
                 style={{ height: "100%", width: "100%" }}
+                scrollWheelZoom={true}
                 ref={setMapRef}
+                whenCreated={setMap}
             >
                 <LayersControl position="topright">
                     <LayersControl.Overlay
@@ -266,6 +270,10 @@ function MapPanel({ updateInfo, mapRef }) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+
+                {/* ONLY RENDER LEGEND IF MAP EXITS */}
+                {map && <Legend map={map} />} 
+                
             </MapContainer>
         </div>
     );
