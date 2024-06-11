@@ -13,7 +13,7 @@ function ContactForm() {
 	const sendEmail = (event) => {
 		event.preventDefault();
 		axios
-			.post("http://displacement-risk-backend.vercel.app/send", { ...contactForm })
+			.post("https://displacement-risk-backend.vercel.app/send", { ...contactForm })
 			.then((response) => {
 				setResult(response.data);
 				setContactForm({
