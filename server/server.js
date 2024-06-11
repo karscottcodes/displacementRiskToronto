@@ -32,7 +32,7 @@ app.use(
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-	console.log(`Backend UP: http://localhost:${port}`);
+	// console.log(`Backend UP: http://localhost:${port}`);
 });
 
 mongoose
