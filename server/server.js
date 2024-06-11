@@ -25,7 +25,8 @@ app.use(express.static(buildPath));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
 	cors({
-		origin: "*",
+		origin: 'https://displacement-risk-toronto-pl3w7fhji-kyle-ss-projects.vercel.app',
+    	optionsSuccessStatus: 200
 	})
 );
 
