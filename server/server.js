@@ -26,11 +26,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
 	cors({
-		origin: "https://displacement-risk-toronto.vercel.app/",
-    	methods: ["POST","GET"],
-		credentials: true
+	  origin: ["https://displacement-risk-toronto.vercel.app", "http://localhost:3000"],
+	  methods: ["POST", "GET"],
+	  credentials: true
 	})
-);
+  );
 
 const port = process.env.PORT || 3000;
 
