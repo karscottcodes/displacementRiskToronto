@@ -9,7 +9,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start-server": "node ../server/server.js",
-    "start-app": "npm run build && npm run start-server"
+    "start-app": "npm run build && npm run start-server",
+    "vercel-build": "npm run build && npm run start-server"
   },
   "dependencies": {
     "autoprefixer": "^10.4.19",
