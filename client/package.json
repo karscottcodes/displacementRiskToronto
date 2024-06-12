@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "start-server": "node ../server/server.js",
     "start-app": "npm run build && npm run start-server",
-    "vercel-build": "npm run build"
+    "vercel-build": "npm i && npm run build"
   },
   "dependencies": {
     "autoprefixer": "^10.4.19",
