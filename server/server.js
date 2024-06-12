@@ -12,7 +12,7 @@ const { npPackage, getAllProfiles } = require("./opendata/nh_profiles");
 const rankNeighbourhoods = require("./algo/vTwo");
 
 dotenv.config();
-
+ 
 //Models
 const MenuLinkModel = require("./Models/MenuLink");
 
@@ -26,8 +26,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
 	cors({
-		origin: 'https://displacement-risk-toronto.vercel.app',
-    	optionsSuccessStatus: 200
+		origin: "https://displacement-risk-toronto.vercel.app",
+    	methods: ["POST","GET"],
+		credentials: true
 	})
 );
 
@@ -43,6 +44,10 @@ mongoose
 	)
 	.then(() => console.log("Connected to torontoRisk DB"))
 	.catch((error) => console.error("Error on DB Connection:", error));
+
+app.get("/", (req, res) => {
+	res.json("API Connected.");
+});
 
 app.get("/api/menu", async (req, res) => {
 	try {
