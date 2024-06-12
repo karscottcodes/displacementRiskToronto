@@ -132,3 +132,4 @@ dist
 
 # "Depreciated" Files
 Dep_*.*
+.vercel
