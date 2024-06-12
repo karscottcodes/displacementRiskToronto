@@ -39,7 +39,7 @@ function MapPanel({ updateInfo, mapRef }) {
 
     useEffect(() => {
         axios
-            .get("https://displacement-risk-backend.vercel.app:3000/api/neighbourhoods")
+            .get("https://displacement-risk-api.vercel.app/api/neighbourhoods")
             .then((response) => {
                 const reversedHoods = response.data.map((hood) => {
                     try {
@@ -67,7 +67,7 @@ function MapPanel({ updateInfo, mapRef }) {
 
     useEffect(() => {
         axios
-            .get("https://displacement-risk-backend.vercel.app/api/neighbourhoods140")
+            .get("https://displacement-risk-api.vercel.app/api/neighbourhoods140")
             .then((response) => {
                 const reversedHoods140 = response.data.map((hood) => {
                     if (hood.geometry && hood.geometry.coordinates) {

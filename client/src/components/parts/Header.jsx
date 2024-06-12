@@ -6,7 +6,7 @@ function Header() {
 
 	useEffect(() => {
 		axios
-			.get("https://displacement-risk-backend.vercel.app/api/menu")
+			.get("https://displacement-risk-api.vercel.app/api/menu")
 			.then((response) => {
 				setMenuLinks(response.data);
 			})

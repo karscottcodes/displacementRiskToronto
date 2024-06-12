@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
 	cors({
-		origin: "https://displacement-risk-toronto.vercel.app",
+		origin: "https://displacement-risk-toronto.vercel.app/",
     	methods: ["POST","GET"],
 		credentials: true
 	})
