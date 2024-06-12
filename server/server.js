@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
 	cors({
-	  origin: ["https://displacement-risk-toronto.vercel.app", "http://localhost:3000"],
+	  origin: ["https://displacement-risk-toronto.vercel.app", "http://localhost:5173"],
 	  methods: ["POST", "GET"],
 	  credentials: true
 	})

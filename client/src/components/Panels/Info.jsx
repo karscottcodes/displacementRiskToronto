@@ -309,11 +309,11 @@ function InfoPanel({ info }) {
 						<div className="pb-3"><span className="font-bold">Income in Lower Half:</span> {info.VULNERABILITIES.inc_lower_half}</div>
 						<div><span className="font-bold">Income in Upper Half:</span> {info.VULNERABILITIES.inc_upper_half}</div>
 						<div className="col-span-2 font-bold text-xl py-3"><h4>Population Distribution</h4></div>
-						<div><span className="font-bold">Children/Youth (0 - 14):</span> {info.VULNERABILITIES.zero_fourteen} %</div>
+						<div><span className="font-bold">Children/Youth (0 - 14):</span> {info.VULNERABILITIES.children} + {info.VULNERABILITIES.youth} %</div>
 						<div className="row-span-4"><Pie options={chartOptions} data={ageData} /></div>
-						<div><span className="font-bold">Working Age (15-64):</span> {info.VULNERABILITIES.fifteen_sixtyfour} %</div>
-						<div><span className="font-bold">Seniors (65+):</span> {info.VULNERABILITIES.sixtyfiveplus} %</div>
-						<div><span className="font-bold">Older Seniors (85+):</span> {info.VULNERABILITIES.eightyfiveplus} %</div>
+						<div><span className="font-bold">Working Age (15-64):</span> {info.VULNERABILITIES.working_age} + {info.VULNERABILITIES.pre_retired} %</div>
+						<div><span className="font-bold">Seniors (65+):</span> {info.VULNERABILITIES.seniors} %</div>
+						<div><span className="font-bold">Older Seniors (85+):</span> {info.VULNERABILITIES.older_seniors} %</div>
 						<div className="col-span-2 text-2xl pt-10 font-bold underline text-tor-red"><h3>Housing Conditions</h3></div>
 						<div className="col-span-2 font-bold text-xl py-3"><h4>Housing Type</h4></div>
 						<div>Single Detached: {info.CONDITIONS.single_detached}</div>
