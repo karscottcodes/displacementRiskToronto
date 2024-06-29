@@ -38,11 +38,6 @@ app.listen(port, () => {
 	// console.log(`Backend UP: http://localhost:${port}`);
 });
 
-// Catch-all route to serve React app's index.html for non-API routes
-app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-  });
-
 mongoose
 	.connect(
 		`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}torontoRisk`
@@ -169,6 +164,11 @@ app.get("/api/neighbourhoods140", async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
+
+// Catch-all route to serve React app's index.html for non-API routes
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
+  });
 
 //ContactForm
 app.post("/send", (req, res) => {
