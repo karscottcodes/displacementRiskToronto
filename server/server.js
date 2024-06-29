@@ -8,20 +8,20 @@ const xml2js = require("xml2js");
 const transporter = require("./config");
 const { getAllBoundaries, nhPackage } = require("./opendata/neighbourhoods");
 const { npPackage, getAllProfiles } = require("./opendata/nh_profiles");
-// const rankNeighbourhoods = require("./algo/vOne");
 const rankNeighbourhoods = require("./algo/vTwo");
 
+//Load local environment variables
 dotenv.config();
  
 //Models
 const MenuLinkModel = require("./Models/MenuLink");
 
+//Build Directory
 const buildPath = path.join(__dirname, "../client", "build");
 
 const app = express();
 app.use(express.json());
 app.use(express.static(buildPath));
-//Serve Static Files
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
@@ -37,6 +37,11 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	// console.log(`Backend UP: http://localhost:${port}`);
 });
+
+// Catch-all route to serve React app's index.html for non-API routes
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  });
 
 mongoose
 	.connect(
@@ -164,11 +169,6 @@ app.get("/api/neighbourhoods140", async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 });
-
-// Catch-all route to serve React app's index.html for non-API routes
-app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
-  });
 
 //ContactForm
 app.post("/send", (req, res) => {
