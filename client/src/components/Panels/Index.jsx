@@ -9,10 +9,6 @@ function Panels() {
 	const [info, setInfo] = useState({areaName:"", classification:""});
 	const mapRef = useRef();
 
-	// Change The Panel Orientation Based on Screen Size (Yes/No)
-	const [isVertical, setIsVertical] = useState(true);
-	
-
 	const updateInfo = (newInfo) => {
 		setInfo(newInfo);
 	}
@@ -37,17 +33,7 @@ function Panels() {
 		if (mapRef.current) {
 		  mapRef.current.invalidateSize();
 		}
-	  }, [sizes, isVertical]);
-	
-	  useEffect(() => {
-		// Triggers a resize after the component mounts
-		setTimeout(() => {
-		  setSizes([...sizes]); // Triggers re-render
-		  if (mapRef.current) {
-			mapRef.current.invalidateSize();
-		  }
-		}, 100); // Adds a delay to ensure container is fully rendered
-	  }, []);
+	}, [sizes]);
 
 	useEffect(() => {
 		const handleWindow = () => {
@@ -66,11 +52,9 @@ function Panels() {
 		};
 	}, []);
 
-
 	return (
 		<div style={{ height: "100vh" }}>
-			<SplitPane split={isVertical ? "vertical" : "horizontal"} sizes={sizes} onChange={setSizes}>
-			{/* if true, set vertical */}
+			<SplitPane split="vertical" sizes={sizes} onChange={setSizes}>
 				<Pane minSize="25%" maxSize="50%">
 					<div style={{ ...infoCss }} className="bg-white">
 						<InfoPanel info={info} />
