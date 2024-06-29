@@ -35,9 +35,19 @@ function Panels() {
 
 	useEffect(() => {
 		if (mapRef.current) {
-			mapRef.current.invalidateSize();
+		  mapRef.current.invalidateSize();
 		}
-	}, [sizes]);
+	  }, [sizes, isVertical]);
+	
+	  useEffect(() => {
+		// Triggers a resize after the component mounts
+		setTimeout(() => {
+		  setSizes([...sizes]); // Triggers re-render
+		  if (mapRef.current) {
+			mapRef.current.invalidateSize();
+		  }
+		}, 100); // Adds a delay to ensure container is fully rendered
+	  }, []);
 
 	useEffect(() => {
 		const handleWindow = () => {
@@ -55,6 +65,7 @@ function Panels() {
 			window.removeEventListener("resize", handleWindow);
 		};
 	}, []);
+
 
 	return (
 		<div style={{ height: "100vh" }}>
